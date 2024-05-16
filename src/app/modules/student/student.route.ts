@@ -5,6 +5,8 @@ const router = express.Router();
 
 // will call controler function
 router.post("/create-student", StudentControllers.createStudent);
+router.get("/", StudentControllers.getAllStudent);
+router.get("/:studentId", StudentControllers.getSingleStudent);
 
 
 export const StudentRoutes =router
