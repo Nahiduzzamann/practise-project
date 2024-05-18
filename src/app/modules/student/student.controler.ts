@@ -1,13 +1,25 @@
 import { Request, Response } from "express";
 import { StudentServices } from "./student.service";
+import studentValidateSchema from "./student.validation";
 
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { student: studentData } = req.body;
-    //   will call service function to send this data
+    // creating schema validation using Joi
+    const { error, value } = studentValidateSchema.validate(studentData);
+
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        error: error.details,
+      });
+    }
+
+    // Call service function to save this data
     const result = await StudentServices.createStudentIntoDB(studentData);
-    //send response
-    res.status(200).json({
+    // Send response
+    res.status(201).json({
       success: true,
       message: "Student is created successfully",
       data: result,
@@ -20,33 +32,43 @@ const createStudent = async (req: Request, res: Response) => {
     });
   }
 };
+
 const getAllStudent = async (req: Request, res: Response) => {
   try {
-    //   will call service function to send this data
+    // Call service function to get all students
     const result = await StudentServices.getAllStudentFromDB();
-    //send response
+    // Send response
     res.status(200).json({
       success: true,
       message: "Students retrieved successfully",
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      data: error,
+    });
   }
 };
+
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const studentId = req.params.studentId;
-    //   will call service function to send this data
+    // Call service function to get a single student
     const result = await StudentServices.getSingleStudentFromDB(studentId);
-    //send response
+    // Send response
     res.status(200).json({
       success: true,
-      message: "Students retrieved successfully",
+      message: "Student retrieved successfully",
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      data: error,
+    });
   }
 };
 
