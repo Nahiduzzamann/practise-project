@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { Guardian, Student, UserName } from "./student.interface";
+import { TGuardian, TStudent,  StudentModel, TUserName } from "./student.interface";
 
-const userNameSchema = new Schema<UserName>({
+const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: true,
@@ -29,7 +29,7 @@ const userNameSchema = new Schema<UserName>({
   },
 });
 
-const guardianSchema = new Schema<Guardian>({
+const guardianSchema = new Schema<TGuardian>({
   fatherName: { type: String },
   fatherOccupation: { type: String },
   fatherContactNo: { type: String },
@@ -45,7 +45,7 @@ const localGuardianSchema = new Schema({
   address: { type: String },
 });
 
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent,StudentModel>({
   id: { type: String, required: true, unique: true },
   name: { type: userNameSchema, required: [true, "Name is required"] },
   gender: {
@@ -91,4 +91,41 @@ const studentSchema = new Schema<Student>({
   },
 });
 
-export const StudentModel = model("Student", studentSchema);
+
+//pre save middleware/hook : will work on create() save() function
+//we can use this when pass store in encripted
+studentSchema.pre('save',function(next){
+  console.log(this, 'pre hook : we will save the data');
+  
+})
+//post save middleware/hook
+
+studentSchema.post('save',function(doc,nex){
+  console.log(this, 'post hook : we saved our data');
+  
+})
+
+
+//Query Middleware
+
+
+
+
+
+
+
+
+
+//creating a custom static method
+studentSchema.statics.isUserExists =async function (id:string) {
+  const existingUser = await Student.findOne({id})
+  return existingUser
+}
+
+// creating a custom intance method 
+// studentSchema.methods.isUserExits = async function (id:string) {
+//   const existingUser = await Student.findOne({id})
+//   return existingUser
+// }
+
+export const Student = model<TStudent, StudentModel>("Student", studentSchema);

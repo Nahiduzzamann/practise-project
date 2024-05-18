@@ -31,11 +31,11 @@ const zodValidatedData = StudentZodSchema.parse(studentData)
       message: "Student is created successfully",
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: "Something went wrong",
-      data: error,
+      message: error.message || "Something went wrong",
+      error: error,
     });
   }
 };
@@ -78,7 +78,7 @@ const getSingleStudent = async (req: Request, res: Response) => {
     });
   }
 };
-
+ 
 export const StudentControllers = {
   createStudent,
   getAllStudent,
