@@ -1,23 +1,30 @@
 import { Request, Response } from "express";
 import { StudentServices } from "./student.service";
-import studentValidateSchema from "./student.validation";
+import {z} from "zod";
+import { StudentZodSchema } from "./student.zod.validation";
 
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { student: studentData } = req.body;
-    // creating schema validation using Joi
-    const { error, value } = studentValidateSchema.validate(studentData);
+    // // creating schema validation using Joi
+    // const { error, value } = studentValidateSchema.validate(studentData);
 
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        message: "Validation error",
-        error: error.details,
-      });
-    }
+
+    // if (error) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Validation error",
+    //     error: error.details,
+    //   });
+    // }
+
+
+
+    // creating schema validation using zod
+const zodValidatedData = StudentZodSchema.parse(studentData)
 
     // Call service function to save this data
-    const result = await StudentServices.createStudentIntoDB(studentData);
+    const result = await StudentServices.createStudentIntoDB(zodValidatedData); 
     // Send response
     res.status(201).json({
       success: true,

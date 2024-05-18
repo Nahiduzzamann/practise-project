@@ -1,10 +1,10 @@
 export type Guardian = {
-  fatherName: string;
-  fatherOccupation: string;
-  fatherContactNo: string;
-  motherName: string;
-  motherOccupation: string;
-  motherContactNo: string;
+  fatherName?: string;  // Optional field
+  fatherOccupation?: string;  // Optional field
+  fatherContactNo?: string;  // Optional field
+  motherName?: string;  // Optional field
+  motherOccupation?: string;  // Optional field
+  motherContactNo?: string;  // Optional field
 };
 export type UserName = {
   firstName: string;
@@ -12,16 +12,16 @@ export type UserName = {
   middleName: string;
 };
 export type LocalGuardian = {
-  name: string;
-  occupation: string;
-  contactNo: string;
-  address: string;
+  name?: string;  // Optional field
+  occupation?: string;  // Optional field
+  contactNo?: string;  // Optional field
+  address?: string;  // Optional field
 };
 export type Student = {
   id: string;
   name: UserName;
   email: string;
-  gender: "male" | "female";
+  gender: "male" | "female" | "other";
   dateOfBirth?: string;
   contactNo: string;
   emergencyContactNo: string;

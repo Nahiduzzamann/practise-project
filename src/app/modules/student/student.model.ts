@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import { Guardian, Student, UserName } from "./student.interface";
-import validator from "validator";
 
 const userNameSchema = new Schema<UserName>({
   firstName: {
