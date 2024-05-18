@@ -13,7 +13,11 @@ const createStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      data: error,
+    });
   }
 };
 const getAllStudent = async (req: Request, res: Response) => {
@@ -32,7 +36,7 @@ const getAllStudent = async (req: Request, res: Response) => {
 };
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
-    const studentId = req.params.studentId
+    const studentId = req.params.studentId;
     //   will call service function to send this data
     const result = await StudentServices.getSingleStudentFromDB(studentId);
     //send response
@@ -49,5 +53,5 @@ const getSingleStudent = async (req: Request, res: Response) => {
 export const StudentControllers = {
   createStudent,
   getAllStudent,
-  getSingleStudent
+  getSingleStudent,
 };
