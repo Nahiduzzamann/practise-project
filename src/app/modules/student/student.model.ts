@@ -1,5 +1,10 @@
 import { Schema, model } from "mongoose";
-import { TGuardian, TStudent,  StudentModel, TUserName } from "./student.interface";
+import {
+  TGuardian,
+  TStudent,
+  StudentModel,
+  TUserName,
+} from "./student.interface";
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -45,7 +50,13 @@ const localGuardianSchema = new Schema({
   address: { type: String },
 });
 
-const studentSchema = new Schema<TStudent,StudentModel>({
+const studentSchema = new Schema<TStudent, StudentModel>({
+  user: {
+    type: Schema.Types.ObjectId,
+    required: [true, "User Id required"],
+    unique: true,
+    ref: "User",
+  },
   id: { type: String, required: true, unique: true },
   name: { type: userNameSchema, required: [true, "Name is required"] },
   gender: {
@@ -83,46 +94,29 @@ const studentSchema = new Schema<TStudent,StudentModel>({
   },
   dateOfBirth: { type: String },
   profileImg: { type: String },
-  isActive: {
-    type: String,
-    enum: ["active", "blocked"],
-    required: true,
-    default: "active",
-  },
+ 
 });
-
 
 //pre save middleware/hook : will work on create() save() function
 //we can use this when pass store in encripted
-studentSchema.pre('save',function(next){
-  console.log(this, 'pre hook : we will save the data');
-  
-})
+studentSchema.pre("save", function (next) {
+  console.log(this, "pre hook : we will save the data");
+});
 //post save middleware/hook
 
-studentSchema.post('save',function(doc,nex){
-  console.log(this, 'post hook : we saved our data');
-  
-})
-
+studentSchema.post("save", function (doc, nex) {
+  console.log(this, "post hook : we saved our data");
+});
 
 //Query Middleware
 
-
-
-
-
-
-
-
-
 //creating a custom static method
-studentSchema.statics.isUserExists =async function (id:string) {
-  const existingUser = await Student.findOne({id})
-  return existingUser
-}
+studentSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await Student.findOne({ id });
+  return existingUser;
+};
 
-// creating a custom intance method 
+// creating a custom intance method
 // studentSchema.methods.isUserExits = async function (id:string) {
 //   const existingUser = await Student.findOne({id})
 //   return existingUser
